@@ -36,7 +36,7 @@ func findBookDetails(bookID string, customerID int, libraryService servicelib.Li
 		return nil, false, err
 	}
 
-	isRenewal, err := isisRenewal(book, customerID)
+	isRenewal, err := isRenewal(book, customerID)
 	if err != nil {
 		return nil, false, err
 	}
@@ -66,7 +66,7 @@ func findBook(bookID string, libraryService servicelib.LibraryService) (*service
 	return nil, fmt.Errorf("Book not found")
 }
 
-func isisRenewal(book *servicelib.Book, customerID int) (bool, error) {
+func isRenewal(book *servicelib.Book, customerID int) (bool, error) {
 	if book.CurrentLend != nil {
 		if book.CurrentLend.CustomerID != customerID {
 			return false, fmt.Errorf("Book is currently lended to customer %d", book.CurrentLend.CustomerID)
