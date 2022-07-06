@@ -35,15 +35,18 @@ type InventoryReservation struct {
 type ProductInventoryReservation struct{}
 type FulfillmentStatus struct{}
 
-type Order struct{}
+type Order struct {
+	OrderLines []*OrderLine
+}
+type OrderLine struct{}
 
 type ProductCatalogService interface {
+	AddProduct(*Product) (ProductId, error)
+	RemoveProduct(*Product) error
+	UpdateProduct(*Product) error
 	GetProduct(ProductId) (*Product, error)
 	GetProductList() ([]*Product, error)
 	GetProductListForCountry(*CountryEligibility) ([]*Product, error)
-	AddProduct(*Product) error
-	RemoveProduct(*Product) error
-	UpdateProduct(*Product) error
 
 	GetCountryList() ([]*CountryEligibility, error)
 	SetCountryEligible(ProductId, *CountryEligibility) error
@@ -54,12 +57,20 @@ type InventoryService interface {
 	GetProductInventory(ProductId, CountryEligibilityId) (*ProductInventory, error)
 	GetProductInventories(ProductId) (map[CountryEligibilityId]*ProductInventory, error)
 
-	CheckProductInventory(*Product, *Order, *ProductFulfillmentPolicy) (*InventoryReservation, error)
-	ReserveProductInventory(*Product, *Order, *ProductFulfillmentPolicy) (*InventoryReservation, error)
+	CheckProductInventory(*Order, *ProductFulfillmentPolicy) (*InventoryReservation, error)
+	ReserveProductInventory(*Order, *ProductFulfillmentPolicy) (*InventoryReservation, error)
 	CancelReservation(*ProductInventoryReservation) error
 	FulfillReservation(*ProductInventoryReservation) (*FulfillmentStatus, error)
 }
 
 type OrderService interface {
+	// ...
+}
+
+type PaymentService interface {
+	// ...
+}
+
+type FulfillmentService interface {
 	// ...
 }
